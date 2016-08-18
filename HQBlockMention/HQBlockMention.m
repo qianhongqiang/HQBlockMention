@@ -115,7 +115,7 @@ static HQBlockMention *sharedPlugin;
 - (void)doMenuAction
 {
     NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:@"github://wwwwwwwwww"];
+    [alert setMessageText:@"https://github.com/qianhongqiang/HQBlockMention.git"];
     [alert runModal];
 }
 
