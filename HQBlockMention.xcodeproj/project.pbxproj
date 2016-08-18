@@ -1,0 +1,302 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7F0491651D6303C20073E80E /* HQBlockMention.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = 7F0491641D6303C20073E80E /* HQBlockMention.xcscheme */; };
+		7F0491681D6303C20073E80E /* HQBlockMention.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0491671D6303C20073E80E /* HQBlockMention.m */; };
+		7F0491721D6307AF0073E80E /* HQTextResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0491711D6307AF0073E80E /* HQTextResult.m */; };
+		7F0491791D63096E0073E80E /* NSString+HQTextParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0491781D63096E0073E80E /* NSString+HQTextParser.m */; };
+		7F04917C1D630ECF0073E80E /* NSTextView+HQTextParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F04917B1D630ECF0073E80E /* NSTextView+HQTextParser.m */; };
+		7F0491821D633D4E0073E80E /* NSString+PDRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0491811D633D4E0073E80E /* NSString+PDRegex.m */; };
+		7FDABB841D645A73005376CD /* HQFuncResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FDABB831D645A73005376CD /* HQFuncResult.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7F0491601D6303C20073E80E /* HQBlockMention.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HQBlockMention.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F0491641D6303C20073E80E /* HQBlockMention.xcscheme */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = HQBlockMention.xcscheme; path = HQBlockMention.xcodeproj/xcshareddata/xcschemes/HQBlockMention.xcscheme; sourceTree = SOURCE_ROOT; };
+		7F0491661D6303C20073E80E /* HQBlockMention.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HQBlockMention.h; sourceTree = "<group>"; };
+		7F0491671D6303C20073E80E /* HQBlockMention.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HQBlockMention.m; sourceTree = "<group>"; };
+		7F0491691D6303C20073E80E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7F0491701D6307AF0073E80E /* HQTextResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HQTextResult.h; sourceTree = "<group>"; };
+		7F0491711D6307AF0073E80E /* HQTextResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HQTextResult.m; sourceTree = "<group>"; };
+		7F0491771D63096E0073E80E /* NSString+HQTextParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HQTextParser.h"; sourceTree = "<group>"; };
+		7F0491781D63096E0073E80E /* NSString+HQTextParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HQTextParser.m"; sourceTree = "<group>"; };
+		7F04917A1D630ECF0073E80E /* NSTextView+HQTextParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTextView+HQTextParser.h"; sourceTree = "<group>"; };
+		7F04917B1D630ECF0073E80E /* NSTextView+HQTextParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTextView+HQTextParser.m"; sourceTree = "<group>"; };
+		7F0491801D633D4E0073E80E /* NSString+PDRegex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PDRegex.h"; sourceTree = "<group>"; };
+		7F0491811D633D4E0073E80E /* NSString+PDRegex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PDRegex.m"; sourceTree = "<group>"; };
+		7FDABB821D645A73005376CD /* HQFuncResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HQFuncResult.h; sourceTree = "<group>"; };
+		7FDABB831D645A73005376CD /* HQFuncResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HQFuncResult.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		7F0491581D6303C20073E80E = {
+			isa = PBXGroup;
+			children = (
+				7F0491621D6303C20073E80E /* HQBlockMention */,
+				7F0491611D6303C20073E80E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7F0491611D6303C20073E80E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7F0491601D6303C20073E80E /* HQBlockMention.xcplugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7F0491621D6303C20073E80E /* HQBlockMention */ = {
+			isa = PBXGroup;
+			children = (
+				7F04916F1D6307550073E80E /* TextParser */,
+				7F0491661D6303C20073E80E /* HQBlockMention.h */,
+				7F0491671D6303C20073E80E /* HQBlockMention.m */,
+				7F0491691D6303C20073E80E /* Info.plist */,
+				7F0491631D6303C20073E80E /* Supporting Files */,
+			);
+			path = HQBlockMention;
+			sourceTree = "<group>";
+		};
+		7F0491631D6303C20073E80E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7F0491641D6303C20073E80E /* HQBlockMention.xcscheme */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7F04916F1D6307550073E80E /* TextParser */ = {
+			isa = PBXGroup;
+			children = (
+				7FDABB821D645A73005376CD /* HQFuncResult.h */,
+				7FDABB831D645A73005376CD /* HQFuncResult.m */,
+				7F0491701D6307AF0073E80E /* HQTextResult.h */,
+				7F0491711D6307AF0073E80E /* HQTextResult.m */,
+				7F0491801D633D4E0073E80E /* NSString+PDRegex.h */,
+				7F0491811D633D4E0073E80E /* NSString+PDRegex.m */,
+				7F0491771D63096E0073E80E /* NSString+HQTextParser.h */,
+				7F0491781D63096E0073E80E /* NSString+HQTextParser.m */,
+				7F04917A1D630ECF0073E80E /* NSTextView+HQTextParser.h */,
+				7F04917B1D630ECF0073E80E /* NSTextView+HQTextParser.m */,
+			);
+			path = TextParser;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7F04915F1D6303C20073E80E /* HQBlockMention */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F04916C1D6303C20073E80E /* Build configuration list for PBXNativeTarget "HQBlockMention" */;
+			buildPhases = (
+				7F04915D1D6303C20073E80E /* Sources */,
+				7F04915E1D6303C20073E80E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HQBlockMention;
+			productName = HQBlockMention;
+			productReference = 7F0491601D6303C20073E80E /* HQBlockMention.xcplugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7F0491591D6303C20073E80E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = qian;
+				TargetAttributes = {
+					7F04915F1D6303C20073E80E = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 7F04915C1D6303C20073E80E /* Build configuration list for PBXProject "HQBlockMention" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7F0491581D6303C20073E80E;
+			productRefGroup = 7F0491611D6303C20073E80E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7F04915F1D6303C20073E80E /* HQBlockMention */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7F04915E1D6303C20073E80E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F0491651D6303C20073E80E /* HQBlockMention.xcscheme in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7F04915D1D6303C20073E80E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F0491791D63096E0073E80E /* NSString+HQTextParser.m in Sources */,
+				7F0491721D6307AF0073E80E /* HQTextResult.m in Sources */,
+				7F04917C1D630ECF0073E80E /* NSTextView+HQTextParser.m in Sources */,
+				7FDABB841D645A73005376CD /* HQFuncResult.m in Sources */,
+				7F0491681D6303C20073E80E /* HQBlockMention.m in Sources */,
+				7F0491821D633D4E0073E80E /* NSString+PDRegex.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7F04916A1D6303C20073E80E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		7F04916B1D6303C20073E80E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		7F04916D1D6303C20073E80E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DSTROOT = "$(HOME)";
+				INFOPLIST_FILE = HQBlockMention/Info.plist;
+				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
+				PRODUCT_BUNDLE_IDENTIFIER = com.qian.HQBlockMention;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xcplugin;
+			};
+			name = Debug;
+		};
+		7F04916E1D6303C20073E80E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DSTROOT = "$(HOME)";
+				INFOPLIST_FILE = HQBlockMention/Info.plist;
+				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
+				PRODUCT_BUNDLE_IDENTIFIER = com.qian.HQBlockMention;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xcplugin;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7F04915C1D6303C20073E80E /* Build configuration list for PBXProject "HQBlockMention" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F04916A1D6303C20073E80E /* Debug */,
+				7F04916B1D6303C20073E80E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F04916C1D6303C20073E80E /* Build configuration list for PBXNativeTarget "HQBlockMention" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F04916D1D6303C20073E80E /* Debug */,
+				7F04916E1D6303C20073E80E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7F0491591D6303C20073E80E /* Project object */;
+}
