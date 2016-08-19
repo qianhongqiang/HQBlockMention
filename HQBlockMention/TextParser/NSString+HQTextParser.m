@@ -8,6 +8,8 @@
 
 #import "NSString+HQTextParser.h"
 #import "HQTextResult.h"
+#import "HQFuncResult.h"
+#import "NSString+PDRegex.h"
 
 @implementation NSString (HQTextParser)
 
@@ -239,6 +241,24 @@
         return nil;
     }
     
+}
+
+-(HQFuncResult *) htp_funcResultOfCurrentLoaction:(NSInteger)location
+{
+    NSString *beforeString = [self substringToIndex:location];
+    NSTextCheckingResult *checkResult = [beforeString htp_LastStringMatchesPatternRegex:@"\n?\\s*[+-]\\s*[(]"];
+    
+    if (!checkResult) {
+        return nil;
+    }
+    
+    HQTextResult *containerFunction = [self htp_textResultMatchPartWithPairOpenString:@"{" closeString:@"}" currentLocation:checkResult.range.location];
+    HQFuncResult *function = [[HQFuncResult alloc] init];
+    function.rangeInText = containerFunction.range;
+    function.funcBody = containerFunction.string;
+    function.blockIdentify = [self htp_textResultOfCurrentTotalLineCurrentLocation:checkResult.range.location].string;
+    
+    return function;
 }
 
 @end

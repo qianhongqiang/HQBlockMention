@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @class HQTextResult;
+@class HQFuncResult;
 
 @interface NSString (HQTextParser)
 
@@ -34,6 +35,6 @@
 
 -(HQTextResult *) htp_textResultToEndOfFileCurrentLocation:(NSInteger)location;
 
-
+-(HQFuncResult *) htp_funcResultOfCurrentLoaction:(NSInteger)location;
 
 @end

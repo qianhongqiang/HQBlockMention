@@ -22,4 +22,6 @@
 
 -(NSTextCheckingResult *)htp_firstStringMatchesPatternRegex:(NSString *)patternRegex;
 
+-(NSArray *)htp_allMatchesPatternRegex:(NSString *)patternRegex;
+
 @end

@@ -13,6 +13,7 @@
 		7F0491791D63096E0073E80E /* NSString+HQTextParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0491781D63096E0073E80E /* NSString+HQTextParser.m */; };
 		7F04917C1D630ECF0073E80E /* NSTextView+HQTextParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F04917B1D630ECF0073E80E /* NSTextView+HQTextParser.m */; };
 		7F0491821D633D4E0073E80E /* NSString+PDRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F0491811D633D4E0073E80E /* NSString+PDRegex.m */; };
+		7F3E69391D66F4C000C06CFD /* HQBlockResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F3E69381D66F4C000C06CFD /* HQBlockResult.m */; };
 		7FDABB841D645A73005376CD /* HQFuncResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FDABB831D645A73005376CD /* HQFuncResult.m */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,9 @@
 		7F04917B1D630ECF0073E80E /* NSTextView+HQTextParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTextView+HQTextParser.m"; sourceTree = "<group>"; };
 		7F0491801D633D4E0073E80E /* NSString+PDRegex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PDRegex.h"; sourceTree = "<group>"; };
 		7F0491811D633D4E0073E80E /* NSString+PDRegex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PDRegex.m"; sourceTree = "<group>"; };
+		7F3E69371D66F4C000C06CFD /* HQBlockResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HQBlockResult.h; sourceTree = "<group>"; };
+		7F3E69381D66F4C000C06CFD /* HQBlockResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HQBlockResult.m; sourceTree = "<group>"; };
+		7F3E693A1D66F90D00C06CFD /* HQConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HQConst.h; sourceTree = "<group>"; };
 		7FDABB821D645A73005376CD /* HQFuncResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HQFuncResult.h; sourceTree = "<group>"; };
 		7FDABB831D645A73005376CD /* HQFuncResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HQFuncResult.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,6 +88,9 @@
 				7F0491781D63096E0073E80E /* NSString+HQTextParser.m */,
 				7F04917A1D630ECF0073E80E /* NSTextView+HQTextParser.h */,
 				7F04917B1D630ECF0073E80E /* NSTextView+HQTextParser.m */,
+				7F3E69371D66F4C000C06CFD /* HQBlockResult.h */,
+				7F3E69381D66F4C000C06CFD /* HQBlockResult.m */,
+				7F3E693A1D66F90D00C06CFD /* HQConst.h */,
 			);
 			path = TextParser;
 			sourceTree = "<group>";
@@ -156,6 +163,7 @@
 			files = (
 				7F0491791D63096E0073E80E /* NSString+HQTextParser.m in Sources */,
 				7F0491721D6307AF0073E80E /* HQTextResult.m in Sources */,
+				7F3E69391D66F4C000C06CFD /* HQBlockResult.m in Sources */,
 				7F04917C1D630ECF0073E80E /* NSTextView+HQTextParser.m in Sources */,
 				7FDABB841D645A73005376CD /* HQFuncResult.m in Sources */,
 				7F0491681D6303C20073E80E /* HQBlockMention.m in Sources */,

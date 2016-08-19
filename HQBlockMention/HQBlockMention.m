@@ -12,12 +12,9 @@
 #import "NSString+HQTextParser.h"
 #import "NSTextView+HQTextParser.h"
 #import "NSString+PDRegex.h"
+#import "HQBlockResult.h"
+#import "HQConst.h"
 
-static NSString *const kBlockIdentify = @"^";
-
-static const float upPadding = 15;
-static const float dismissInterval = 3;
-static const float alertInterval = 30;
 
 static HQBlockMention *sharedPlugin;
 
@@ -132,233 +129,84 @@ static HQBlockMention *sharedPlugin;
     
     if ([[noti object] isKindOfClass:[NSTextView class]]) {
         NSTextView *textView = (NSTextView *)[noti object];
-        //Parse the current line,check if a '^' syntax and do not contain 'typedef'
+        self.shouldRemind = NO;
         [self startCheck:textView];
     }
 }
 
 -(void)startCheck:(NSTextView *)textView
 {
-    HQTextResult *blockStart = [textView htp_textResultLastString:kBlockIdentify];
-    if (nil == blockStart) {
+    HQFuncResult *currentFunction = [self checkIfCurrentLocationInMethod:textView];
+    if (!currentFunction) {return;}
+    
+    NSNumber *value = [self.mentionedBlocks objectForKey:currentFunction.blockIdentify];
+    
+    if (value && (([NSDate date].timeIntervalSince1970 -[value doubleValue]) < sameBlockMentionInterval)) {
         return;
     }
     
-    //find the block body
-    HQTextResult *blockContent = [textView.textStorage.string htp_textResultMatchPartWithPairOpenString:@"{" closeString:@"}" currentLocation:blockStart.range.location];
-    if (nil == blockContent) {
-        return;
-    }
+    HQBlockResult *blockInfunc = [self checkIfBlockInFunction:currentFunction];
+    if (!blockInfunc) {return;}
     
-    //find the block startline,and define the first line as key for the block
-    HQTextResult *blockStartLine = [textView.textStorage.string htp_textResultOfCurrentTotalLineCurrentLocation:blockStart.range.location];
+    [self checkBlockAttributeToken:currentFunction beforeBlock:blockInfunc textView:textView];
+    [self checkBlockSelfTokenAndPropertToken:blockInfunc InFunc:currentFunction textView:textView];
     
-    if (blockStartLine.range.location <blockContent.range.location && (blockStartLine.range.location + blockStartLine.range.length)>blockContent.range.location) {
-        HQFuncResult *block = [[HQFuncResult alloc] init];
-        block.rangeInText = blockContent.range;
-        block.funcBody = blockContent.string;
-        block.blockIdentify = blockStartLine.string;
-        
-        HQFuncResult *blockInMap = [self.mentionedBlocks objectForKey:block.blockIdentify];
-        
-        if (blockInMap) {
-            NSTimeInterval interval = [NSDate date].timeIntervalSince1970 -  blockInMap.timeStamp;
-            if (interval > 300) {
-                [self checkBlockScopeInside:block inTextView:textView];
-            }
-        }else{
-            [self checkBlockScopeInside:block inTextView:textView];
-        }
-    }
+}
+
+#pragma mark -- new flag
+-(HQFuncResult *)checkIfCurrentLocationInMethod:(NSTextView *)textView
+{
+   return [textView htp_functionOfCurrentLie];
+}
+
+-(HQBlockResult *)checkIfBlockInFunction:(HQFuncResult *)function
+{
+    return [function hasBlockInsdie];
+}
+
+-(void)checkBlockAttributeToken:(HQFuncResult *)function beforeBlock:(HQBlockResult *)block textView:(NSTextView *)textView
+{
+    NSString *middleCode = [function.funcBody substringToIndex:block.rangeInfunction.location];
+    NSArray<NSTextCheckingResult *> *matches = [middleCode htp_allMatchesPatternRegex:@"__block[\\s\\w]+\\*[\\w\\s]+="];
+    if (matches.count == 0) {return;}
     
-    //find the function which the block in
-    NSString *beforeString = [textView.textStorage.string substringToIndex:textView.selectedRange.location];
-    NSTextCheckingResult *checkResult = [beforeString htp_LastStringMatchesPatternRegex:@"\n?\\s*[+-]\\s*[(]"];
+    [self.mentionedBlocks setObject:@([NSDate date].timeIntervalSince1970) forKey:function.blockIdentify];
     
-    if (!checkResult) {
-        return;
-    }
-    
-    HQTextResult *containerFunction = [textView.textStorage.string htp_textResultMatchPartWithPairOpenString:@"{" closeString:@"}" currentLocation:checkResult.range.location];
-    HQFuncResult *function = [[HQFuncResult alloc] init];
-    function.rangeInText = containerFunction.range;
-    function.funcBody = containerFunction.string;
-    function.blockIdentify = [textView.textStorage.string htp_textResultOfCurrentTotalLineCurrentLocation:checkResult.range.location].string;
-    
-    HQFuncResult *blockInMapFunction = [self.mentionedBlocks objectForKey:function.blockIdentify];
-    
-    if (blockInMapFunction) {
-        NSTimeInterval interval = [NSDate date].timeIntervalSince1970 -  blockInMapFunction.timeStamp;
-        if (interval > 300) {
-            [self checkBlockScopeOutsideIn:function inTextView:textView];
-        }
-    }else{
-        [self checkBlockScopeOutsideIn:function inTextView:textView];
+    for (NSTextCheckingResult *match in matches) {
+        [self showTip:@"__block不能消除循环引用,请注意是否需要改成__weak" inTextView:textView InRange:NSMakeRange(match.range.location + function.rangeInText.location, match.range.length)];
     }
 }
 
--(void)checkBlockScopeOutsideIn:(HQFuncResult *)block inTextView:(NSTextView *)textView
+-(void)checkBlockSelfTokenAndPropertToken:(HQBlockResult *)block InFunc:(HQFuncResult *)function textView:(NSTextView *)textView;
 {
-    NSRange dubiousRangeInBlock = [block.funcBody rangeOfString:@"__block"];
-
-    if (dubiousRangeInBlock.location == NSNotFound) {
-        return;
-    }
+    NSString *blockCode = block.blockBody;
+    NSArray<NSTextCheckingResult *> *matches = [blockCode htp_allMatchesPatternRegex:@"(self\\.[\\w\\s]+=)|(\\[self[\\s\\w]+\\])|(\\[\\s*_[\\w\\s]+\\])|(_\\w+\\.*\\s*=)"];
+    if (matches.count == 0) {return;}
     
-    HQTextResult *__blockTotalLine = [block.funcBody htp_textResultOfCurrentTotalLineCurrentLocation:dubiousRangeInBlock.location];
+    [self.mentionedBlocks setObject:@([NSDate date].timeIntervalSince1970) forKey:function.blockIdentify];
     
-    NSRange equalSymbolRange = [__blockTotalLine.string rangeOfString:@"="];
-    
-    if (equalSymbolRange.location != NSNotFound) {
-        NSString *equalBefore = [__blockTotalLine.string substringToIndex:equalSymbolRange.location];
-        if ([equalBefore rangeOfString:@"*"].location == NSNotFound) {
-            return;
-        }
-    }else{
-        if ([__blockTotalLine.string rangeOfString:@"*"].location == NSNotFound) {
-            return;
-        }
-    }
-    
-    NSRange dubiousRange = NSMakeRange(block.rangeInText.location + dubiousRangeInBlock.location, dubiousRangeInBlock.length);
-    if (dubiousRange.location != NSNotFound) {
-        
-        NSRect dubiousRect = [textView.layoutManager boundingRectForGlyphRange:dubiousRange inTextContainer:textView.textContainer];
-        
-        NSRect tipRect = dubiousRect;
-        tipRect.origin.y = tipRect.origin.y - tipRect.size.height - upPadding;
-        tipRect.size.width = 400;
-        tipRect.size.height = 25;
-        NSTextField *label = [[NSTextField alloc] initWithFrame:tipRect];
-        [label setEditable:NO];
-        [label setSelectable:NO];
-        [label setPlaceholderString:@"__block不能接触循环引用,请注意是否需要改成__weak"];
-        [textView addSubview:label];
-        
-        self.shouldRemind = NO;
-        
-        HQFuncResult *blockInMap = [self.mentionedBlocks objectForKey:block.blockIdentify];
-        
-        if (blockInMap) {
-            block.timeStamp = [NSDate date].timeIntervalSince1970;
-        }else {
-            block.timeStamp = [NSDate date].timeIntervalSince1970;
-            [self.mentionedBlocks setObject:block forKey:block.blockIdentify];
-        }
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(dismissInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [label removeFromSuperview];
-        });
-    }
-
-}
-
--(void)checkBlockScopeInside:(HQFuncResult *)block inTextView:(NSTextView *)textView
-{
-    [self checkBlockInsidePropertyRetainCircle:block inTextView:textView];
-    
-    //if content of block matches like '[self' ' self.',might caught retain circle
-    NSRange dubiousRangeInBlock = [block.funcBody rangeOfString:@" self "];
-    if (dubiousRangeInBlock.location == NSNotFound) {
-        dubiousRangeInBlock = [block.funcBody rangeOfString:@" self."];
-    }
-    
-    if (dubiousRangeInBlock.location == NSNotFound) {
-        dubiousRangeInBlock = [block.funcBody rangeOfString:@"[self"];
-    }
-    
-    //sepcial:ReactCocoa provide a Macro which make weak referrence,so check it
-    
-    NSRange ReactCocoaMacro = [block.funcBody rangeOfString:@"@strongify"];
-    
-    if (dubiousRangeInBlock.location == NSNotFound) {
-        return;
-    }
-    
-    
-    if (ReactCocoaMacro.location != NSNotFound && dubiousRangeInBlock.location > ReactCocoaMacro.location) {
-        return;
-    }
-    
-    NSRange dubiousRange = NSMakeRange(block.rangeInText.location + dubiousRangeInBlock.location, dubiousRangeInBlock.length);
-    if (dubiousRange.location != NSNotFound) {
-        
-        NSRect dubiousRect = [textView.layoutManager boundingRectForGlyphRange:dubiousRange inTextContainer:textView.textContainer];
-        
-        NSRect tipRect = dubiousRect;
-        tipRect.origin.y = tipRect.origin.y - tipRect.size.height - upPadding;
-        tipRect.size.width = 200;
-        tipRect.size.height = 25;
-        NSTextField *label = [[NSTextField alloc] initWithFrame:tipRect];
-        [label setEditable:NO];
-        [label setSelectable:NO];
-        [label setPlaceholderString:@"下面可能存在循环引用"];
-        [textView addSubview:label];
-        
-        self.shouldRemind = NO;
-        
-        HQFuncResult *blockInMap = [self.mentionedBlocks objectForKey:block.blockIdentify];
-        
-        if (blockInMap) {
-            block.timeStamp = [NSDate date].timeIntervalSince1970;
-        }else {
-            block.timeStamp = [NSDate date].timeIntervalSince1970;
-            [self.mentionedBlocks setObject:block forKey:block.blockIdentify];
-        }
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(dismissInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [label removeFromSuperview];
-        });
+    for (NSTextCheckingResult *match in matches) {
+        [self showTip:@"这里可能对self引用" inTextView:textView InRange:NSMakeRange(match.range.location + function.rangeInText.location + block.rangeInfunction.location, match.range.length)];
     }
 }
 
--(void)checkBlockInsidePropertyRetainCircle:(HQFuncResult *)block inTextView:(NSTextView *)textView
+-(void)showTip:(NSString *)tip inTextView:(NSTextView *)textView InRange:(NSRange)range
 {
-    NSTextCheckingResult *propertyDubious = [block.funcBody htp_firstStringMatchesPatternRegex:@"\\s*[_].*="];
-    if (!propertyDubious || propertyDubious.range.location == NSNotFound) {
-        return;
-    }
+    NSRect dubiousRect = [textView.layoutManager boundingRectForGlyphRange:range inTextContainer:textView.textContainer];
     
-    NSString *propertyDubiousString = [block.funcBody substringWithRange:propertyDubious.range];
+    NSRect tipRect = dubiousRect;
+    tipRect.origin.y = tipRect.origin.y - tipRect.size.height - upPadding;
+    tipRect.size.width = tip.length * 12;
+    tipRect.size.height = 25;
+    NSTextField *label = [[NSTextField alloc] initWithFrame:tipRect];
+    [label setEditable:NO];
+    [label setSelectable:NO];
+    [label setPlaceholderString:tip];
+    [textView addSubview:label];
     
-    NSRange _range = [propertyDubiousString rangeOfString:@"_"];
-    
-    if (_range.location == NSNotFound) {
-        return;
-    }
-    
-    NSRange dubiousRange = NSMakeRange(block.rangeInText.location + propertyDubious.range.location + _range.location, propertyDubious.range.length - _range.location);
-    
-    if (dubiousRange.location != NSNotFound) {
-        
-        NSRect dubiousRect = [textView.layoutManager boundingRectForGlyphRange:dubiousRange inTextContainer:textView.textContainer];
-        
-        NSRect tipRect = dubiousRect;
-        tipRect.origin.y = tipRect.origin.y - tipRect.size.height - upPadding;
-        tipRect.size.width = 200;
-        tipRect.size.height = 30;
-        NSTextField *label = [[NSTextField alloc] initWithFrame:tipRect];
-        [label setEditable:NO];
-        [label setSelectable:NO];
-        [label setPlaceholderString:@"下面可能存在循环引用"];
-        [textView addSubview:label];
-        
-        self.shouldRemind = NO;
-        
-        HQFuncResult *blockInMap = [self.mentionedBlocks objectForKey:block.blockIdentify];
-        
-        if (blockInMap) {
-            block.timeStamp = [NSDate date].timeIntervalSince1970;
-        }else {
-            block.timeStamp = [NSDate date].timeIntervalSince1970;
-            [self.mentionedBlocks setObject:block forKey:block.blockIdentify];
-        }
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(dismissInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [label removeFromSuperview];
-        });
-    }
-    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(dismissInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [label removeFromSuperview];
+    });
 }
 
 @end

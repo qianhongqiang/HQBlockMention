@@ -119,4 +119,14 @@
     return nil;
 }
 
+-(NSArray *)htp_allMatchesPatternRegex:(NSString *)patternRegex
+{
+    NSRegularExpression *exp = [NSRegularExpression regularExpressionWithPattern:patternRegex
+                                                                         options:NSRegularExpressionCaseInsensitive
+                                                                           error:nil];
+    
+    return [exp matchesInString:self options:0 range:NSMakeRange(0, self.length)];
+
+}
+
 @end

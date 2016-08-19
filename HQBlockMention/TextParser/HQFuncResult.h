@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class HQBlockResult;
 
 @interface HQFuncResult : NSObject
 
@@ -14,5 +15,7 @@
 @property (nonatomic, copy) NSString *funcBody;
 @property (nonatomic, copy) NSString *blockIdentify;
 @property (nonatomic, assign) NSTimeInterval timeStamp;
+
+-(HQBlockResult *)hasBlockInsdie;
 
 @end

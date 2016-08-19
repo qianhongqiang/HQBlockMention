@@ -7,8 +7,9 @@
 //
 
 #import "NSTextView+HQTextParser.h"
-#import "HQTextResult.h"
 #import "NSString+HQTextParser.h"
+#import "HQTextResult.h"
+#import "HQFuncResult.h"
 
 @implementation NSTextView (HQTextParser)
 
@@ -50,6 +51,11 @@
 -(HQTextResult *) htp_textResultToEndOfFile
 {
     return [self.textStorage.string htp_textResultToEndOfFileCurrentLocation:[self htp_currentCurseLocation]];
+}
+
+-(HQFuncResult *) htp_functionOfCurrentLie
+{
+    return [self.textStorage.string htp_funcResultOfCurrentLoaction:[self htp_currentCurseLocation]];
 }
 
 @end

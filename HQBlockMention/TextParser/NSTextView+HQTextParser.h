@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 @class HQTextResult;
+@class HQFuncResult;
 
 @interface NSTextView (HQTextParser)
 
@@ -26,5 +27,7 @@
 -(HQTextResult *) htp_textResultWithPairOpenString:(NSString *)open closeString:(NSString *)close;
 
 -(HQTextResult *) htp_textResultToEndOfFile;
+
+-(HQFuncResult *) htp_functionOfCurrentLie;
 
 @end
