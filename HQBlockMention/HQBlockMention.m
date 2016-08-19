@@ -185,8 +185,12 @@ static HQBlockMention *sharedPlugin;
     
     [self.mentionedBlocks setObject:@([NSDate date].timeIntervalSince1970) forKey:function.blockIdentify];
     
+    NSRange reactiveCocoaMacroRange = [blockCode rangeOfString:@"@strongify"];
+    
     for (NSTextCheckingResult *match in matches) {
-        [self showTip:@"这里可能对self引用" inTextView:textView InRange:NSMakeRange(match.range.location + function.rangeInText.location + block.rangeInfunction.location, match.range.length)];
+        if (match.range.location < reactiveCocoaMacroRange.location) {
+            [self showTip:@"这里可能对self引用" inTextView:textView InRange:NSMakeRange(match.range.location + function.rangeInText.location + block.rangeInfunction.location, match.range.length)];
+        }
     }
 }
 
