@@ -20,11 +20,9 @@ static HQBlockMention *sharedPlugin;
 
 @interface HQBlockMention ()
 
-@property (nonatomic, strong) NSTimer *mentionTimeIntervalTimer;
+@property (nonatomic, assign) BOOL isExecuting;
 
-@property (nonatomic, assign) BOOL shouldRemind;
-
-@property (nonatomic, strong) NSMutableDictionary *mentionedBlocks;
+@property (nonatomic) dispatch_queue_t parse_queque;
 
 @end
 
@@ -75,9 +73,8 @@ static HQBlockMention *sharedPlugin;
                                              selector:@selector(textStorageDidChange:)
                                                  name:NSTextDidBeginEditingNotification
                                                object:nil];
-    [self setupTimer];
-    self.shouldRemind = YES;
-    self.mentionedBlocks = [NSMutableDictionary dictionary];
+    _parse_queque = dispatch_queue_create("com.blockmention.qian", NULL);
+    _isExecuting = NO;
 }
 
 - (void)initializeAndLog
@@ -86,11 +83,6 @@ static HQBlockMention *sharedPlugin;
     NSString *version = [self.bundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     NSString *status = [self initialize] ? @"loaded successfully" : @"failed to load";
     NSLog(@"🔌 Plugin %@ %@ %@", name, version, status);
-}
-
--(void)setupTimer
-{
-    self.mentionTimeIntervalTimer = [NSTimer scheduledTimerWithTimeInterval:alertInterval target:self selector:@selector(timerAction) userInfo:nil repeats:YES];
 }
 
 #pragma mark - Implementation
@@ -116,37 +108,28 @@ static HQBlockMention *sharedPlugin;
     [alert runModal];
 }
 
--(void)timerAction
-{
-    self.shouldRemind = YES;
-}
 
 - (void) textStorageDidChange:(NSNotification *)noti {
-    
-    if (!self.shouldRemind) {
-        return;
-    }
-    
     if ([[noti object] isKindOfClass:[NSTextView class]]) {
         NSTextView *textView = (NSTextView *)[noti object];
-        self.shouldRemind = NO;
-        [self startCheck:textView];
+        
+        if (_isExecuting == YES) return;
+        _isExecuting = YES;
+        
+        dispatch_async(_parse_queque, ^{
+            [self startCheck:textView];
+            _isExecuting = NO;
+        });
     }
 }
 
 -(void)startCheck:(NSTextView *)textView
 {
     HQFuncResult *currentFunction = [self checkIfCurrentLocationInMethod:textView];
-    if (!currentFunction) {return;}
-    
-    NSNumber *value = [self.mentionedBlocks objectForKey:currentFunction.blockIdentify];
-    
-    if (value && (([NSDate date].timeIntervalSince1970 -[value doubleValue]) < sameBlockMentionInterval)) {
-        return;
-    }
+    if (!currentFunction) return;
     
     HQBlockResult *blockInfunc = [self checkIfBlockInFunction:currentFunction];
-    if (!blockInfunc) {return;}
+    if (!blockInfunc) return;
     
     [self checkBlockAttributeToken:currentFunction beforeBlock:blockInfunc textView:textView];
     [self checkBlockSelfTokenAndPropertToken:blockInfunc InFunc:currentFunction textView:textView];
@@ -168,12 +151,12 @@ static HQBlockMention *sharedPlugin;
 {
     NSString *middleCode = [function.funcBody substringToIndex:block.rangeInfunction.location];
     NSArray<NSTextCheckingResult *> *matches = [middleCode htp_allMatchesPatternRegex:@"__block[\\s\\w]+\\*[\\w\\s]+="];
-    if (matches.count == 0) {return;}
-    
-    [self.mentionedBlocks setObject:@([NSDate date].timeIntervalSince1970) forKey:function.blockIdentify];
+    if (matches.count == 0) return;
     
     for (NSTextCheckingResult *match in matches) {
-        [self showTip:@"__block不能消除循环引用,请注意是否需要改成__weak" inTextView:textView InRange:NSMakeRange(match.range.location + function.rangeInText.location, match.range.length)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showTip:@"__block不能消除循环引用,请注意是否需要改成__weak" inTextView:textView InRange:NSMakeRange(match.range.location + function.rangeInText.location, match.range.length)];
+        });
     }
 }
 
@@ -181,15 +164,15 @@ static HQBlockMention *sharedPlugin;
 {
     NSString *blockCode = block.blockBody;
     NSArray<NSTextCheckingResult *> *matches = [blockCode htp_allMatchesPatternRegex:@"(self\\.[\\w\\s]+=)|(\\[self[\\s\\w]+\\])|(\\[\\s*_[\\w\\s]+\\])|(_\\w+\\.*\\s*=)"];
-    if (matches.count == 0) {return;}
-    
-    [self.mentionedBlocks setObject:@([NSDate date].timeIntervalSince1970) forKey:function.blockIdentify];
+    if (matches.count == 0) return;
     
     NSRange reactiveCocoaMacroRange = [blockCode rangeOfString:@"@strongify"];
     
     for (NSTextCheckingResult *match in matches) {
         if (match.range.location < reactiveCocoaMacroRange.location) {
-            [self showTip:@"这里可能对self引用" inTextView:textView InRange:NSMakeRange(match.range.location + function.rangeInText.location + block.rangeInfunction.location, match.range.length)];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showTip:@"这里可能对self引用" inTextView:textView InRange:NSMakeRange(match.range.location + function.rangeInText.location + block.rangeInfunction.location, match.range.length)];
+            });
         }
     }
 }

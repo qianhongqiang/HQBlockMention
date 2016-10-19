@@ -13,7 +13,5 @@ static NSString *const kBlockIdentify = @"^";
 
 static const float upPadding = 15;
 static const float dismissInterval = 3;
-static const float alertInterval = 20;
-static const float sameBlockMentionInterval = 90;
 
 #endif /* HQConst_h */
